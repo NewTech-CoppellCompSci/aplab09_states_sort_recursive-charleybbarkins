@@ -1,12 +1,15 @@
 package sortState;
 
-import java.util.*;
-import java.io.*; 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner; 
 
 public class UnitedStates
 {
 	// instance variables
-	private ArrayList <State> states;
+	private static ArrayList <State> states;
 	
 	public UnitedStates()
 	{
@@ -35,15 +38,190 @@ public class UnitedStates
 	public void sortStates(int front, int back) {
 		
 		
+		if (front < back) {
+			int mid = (front + back) / 2;
+			
+			sortStates(front,mid);
+			sortStates(mid+1,back);
+			
+			mergeTwoSortedArrays(front, mid, back);
+			
+//			for (int i = 0; i < states.size(); i++) {
+//				
+//				for ( int i2 = 0; i2 < frontEnd.size(); i2++) {
+//					states.set(i,  frontEnd.get(i2));
+//				
+//				}
+//				for ( int i2 = 0; i2 < backEnd.size(); i2++) {
+//					states.set(i,  backEnd.get(i2));
+//				
+//				}
+//				
+//			}
 		
-		
-		
-		
-		
-		
+		}
 		
 	}
 	
+	public void mergeTwoSortedArrays(int front, int mid, int back) {
+
+		State[] temp = new State[states.size()];  //.size();
+		
+		//temp = new ArrayList <State> ();
+		
+		
+//		for (int i = front; i != back; i++) {
+//			
+//			temp.add(states.get(i));
+//	
+//		}
+		
+		int i = front;
+		int j = mid + 1; 
+		int k = front;
+		
+		//while (k!= 23 && j != 23 && k != 23) {
+		while (i <= mid && j <= back) {
+			
+			if (states.get(i).getName().compareTo(states.get(j).getName()) < 0) {
+				
+				State holder = states.get(i);
+				temp[k] =  holder;
+				
+				i++;
+				
+			}else {
+				
+				State holder = states.get(j);
+				temp[k] =  holder;
+				j++;
+				
+				
+			}
+			k++;
+			
+		}
+		
+		while (i <= mid ) {
+			
+			State holder = states.get(i);
+			temp[k] =  holder;
+			i++;
+			k++;
+			
+		}
+		
+		while (j <= back) {
+			
+			State holder = states.get(j);
+			temp[k] =  holder;
+			j++;
+			k++;
+			
+		}
+		
+		
+		for (int i2 = front; i2 <= back; i2++) {
+			//place item from temp into arrasyList st thast index
+			//System.out.println(temp.get(i2).getCapital());
+			states.set(i2, temp[i2]);
+		}
+		
+		//}
+		
+	}
+
+	
+	
+
+//		ArrayList <State> temp;
+//		
+//		temp = new ArrayList <State> ();
+//		
+//		for (int i = front; i < temp.size(); i++) {
+//			
+//			while (i != back) {
+//				temp.add(states.get(i));
+//			
+//			}
+//		}
+//		
+//		int i = front;
+//		int j = mid + 1; 
+//		int k = front;
+//		
+//		while (i <= mid && j <= back) {
+//			
+//			if (states.get(i).getName().compareTo(states.get(i).getName()) < 0) {
+//				
+//				State holder = states.get(i);
+//				states.set(k, holder);
+//				i++;
+//				
+//			}else {
+//				
+//				State holder = states.get(j);
+//				states.set(k, holder);
+//				j++;
+//				
+//			}
+//			k++;
+//			
+//		}
+//		
+//		while (i<= mid) {
+//			
+//			State holder = states.get(i);
+//			states.set(k, holder);
+//			i++;
+//			
+//			k++;
+//		}
+//		
+//		while (j <= back) {
+//			
+//			State holder = states.get(j);
+//			states.set(k, holder);
+//			k++;
+//			
+//		}
+//		for ( int i2 = 0; i < temp.size();i2++ ) {
+//			
+//			states.set(i2, temp.get(i2));
+//			
+//		}
+//		
+//		
+//		
+//		
+//	}
+	
+//	public ArrayList merge( int front, int back) {
+//		
+//		ArrayList <State> temp;
+//		
+//		temp = new ArrayList <State> ();
+//		
+//		for (int i = front; i < temp.size(); i++) {
+//			
+//			while (i != back) {
+//				temp.add(states.get(i));
+//			
+//			}
+//		}
+//		
+//		for (temp ) {
+//			
+//			
+//			
+//			
+//			
+//		}
+//		
+//		return temp;
+//		
+//	}
+		
 	
 	/*
 	 * Quick Sort
@@ -53,7 +231,14 @@ public class UnitedStates
 	 */
 	public void sortCapitals(int low, int high) {
 		
-		
+		while(low < high) {
+			
+			 int split = partition(low,high);
+			
+			sortCapitals(low,split);
+			sortCapitals(split+1,high);
+			
+		}
 		
 		
 		
@@ -61,7 +246,49 @@ public class UnitedStates
 		
 	}
 	
-	
+	public int partition(int low, int high) {
+		
+		String pivot = states.get(low).getCapital();
+		
+		int bot = low;
+		
+		int top = high;
+		
+		while (bot < top) {
+			
+			while (states.get(bot).getCapital().compareTo(pivot) > 0) {
+				
+				
+				
+				
+				bot++;
+			}
+			while (states.get(top).getCapital().compareTo(pivot) > 0) {
+				
+				top--;
+			}
+			
+			if (bot >= top) {
+				//printStates();
+				return top;
+				
+			}
+			System.out.println("Bot = " + bot);
+			System.out.println("Top = " + top);
+			State holder = states.get(bot);
+			states.set(bot, states.get(top));
+			states.set(top, holder);
+			
+			
+			bot++;
+			top--;
+			}
+			
+		
+		
+		return top;
+		
+	}
 	
 	
 	
@@ -174,3 +401,4 @@ public class UnitedStates
 		
 	}
 }
+	
